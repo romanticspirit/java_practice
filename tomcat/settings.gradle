@@ -15,3 +15,4 @@ project(':ex01').projectDir = new File (settingsDir, './ex01')
 
 include ':ex02'
 include ':testServlet'
+include ':ex02_1'
