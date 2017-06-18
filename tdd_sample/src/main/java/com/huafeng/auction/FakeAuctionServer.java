@@ -1,16 +1,20 @@
 package com.huafeng.auction;
 
-import org.jivesoftware.smack.Chat;
-import org.jivesoftware.smack.ChatManagerListener;
-import org.jivesoftware.smack.XMPPConnection;
-import org.jivesoftware.smack.XMPPException;
+import org.hamcrest.Matcher;
+import org.jivesoftware.smack.*;
 import org.jivesoftware.smack.packet.Message;
 
 import java.beans.IntrospectionException;
 
 import static com.huafeng.auction.Main.AUCTION_RESOURCE;
 import static com.huafeng.auction.Main.ITEM_ID_AS_LOGIN;
+
 import static java.lang.String.format;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 /**
  * Created by stephen on 17/6/16.
@@ -52,16 +56,30 @@ public class FakeAuctionServer {
         return  itemId;
     }
 
-    public void hasReceivedJoinRequestFromSniper () throws InterruptedException {
-        messageListener.receiveAMessage ();
+    public void hasReceivedJoinRequestFromSniper (String sniperId) throws InterruptedException {
+        receivesAMessageMatching(sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
     }
 
     public void announceClosed() throws XMPPException{
-        currentChat.sendMessage(new Message());
+        currentChat.sendMessage("SOLVersion: 1.1; Event: CLOSE;");
     }
 
     public void stop (){
         connection.disconnect();
     }
 
+    private void receivesAMessageMatching (String sniperId, Matcher<? super String> messageMatcher) throws InterruptedException {
+        messageListener.receiveAMessage(messageMatcher);
+        assertThat(currentChat.getParticipant(), equalTo(sniperId));
+    }
+
+    public void reportPrice(int price, int increment, String bidder) throws XMPPException {
+        currentChat.sendMessage(
+                String.format("SOLVersion: 1.1; Event: PRICE; " +
+                        "CurrentPrice: %d; Increment: %d; Bidder: %s;", price, increment, bidder));
+    }
+
+    public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
+        receivesAMessageMatching(sniperId, equalTo(format(Main.BID_COMMAND_FORMAT, bid)));
+    }
 }

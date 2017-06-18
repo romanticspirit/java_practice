@@ -1,7 +1,9 @@
 package com.huafeng.auction;
 
+import static com.huafeng.auction.Constant.STATUS_BIDDING;
 import static com.huafeng.auction.Constant.STATUS_JOINING;
 import static com.huafeng.auction.Constant.STATUS_LOST;
+import static com.huafeng.auction.FakeAuctionServer.XMPP_HOSTNAME;
 
 /**
  * Created by stephen on 17/6/16.
@@ -9,6 +11,8 @@ import static com.huafeng.auction.Constant.STATUS_LOST;
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";
     public static final String SNIPER_PASSWORD = "sniper";
+
+    public static final String SNIPER_XMPP_ID = SNIPER_ID + "@" + XMPP_HOSTNAME + "/Auction";
 
 
     private AuctionSniperDriver driver;
@@ -18,7 +22,7 @@ public class ApplicationRunner {
             @Override
             public void run (){
                 try{
-                    Main.main(FakeAuctionServer.XMPP_HOSTNAME,
+                    Main.main(XMPP_HOSTNAME,
                             SNIPER_ID, SNIPER_PASSWORD, auction.getItemId());
                 }
                 catch (Exception e){
@@ -47,4 +51,7 @@ public class ApplicationRunner {
     }
 
 
+    public void hasShownSniperIsBidding() {
+        driver.showSniperStatus(STATUS_BIDDING);
+    }
 }
