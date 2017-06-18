@@ -12,7 +12,10 @@ import java.util.HashMap;
 
 public class AuctionMessageTranslator implements MessageListener{
     private final AuctionEventListener listener;
-    public AuctionMessageTranslator(AuctionEventListener listener) {
+    private final String sniperId;
+
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+        this.sniperId = sniperId;
         this.listener = listener;
     }
 
@@ -22,7 +25,7 @@ public class AuctionMessageTranslator implements MessageListener{
         if ("CLOSE".equals(type)){
             listener.auctionClosed();
         }else if ("PRICE".equals(type)){
-            listener.currentPrice(event.getCurrentPrice(), event.increment());
+            listener.currentPrice(event.getCurrentPrice(), event.increment(), event.isFrom(sniperId));
         }
     }
 

@@ -6,5 +6,5 @@ package com.huafeng.auction;
 public interface AuctionEventListener {
         void auctionClosed() ;
 
-        void currentPrice(int price, int increment);
+        void currentPrice(int price, int increment, PriceSource source);
 }

@@ -45,4 +45,12 @@ public class AuctionEvent {
     private static String[] fieldsIn(String messageBody) {
         return messageBody.split(";");
     }
+
+    public PriceSource isFrom(String sniperId) {
+        return sniperId.equals(bidder()) ? PriceSource.fromSniper: PriceSource.fromOtherBidder;
+    }
+
+    private String bidder (){
+        return get("Bidder");
+    }
 }

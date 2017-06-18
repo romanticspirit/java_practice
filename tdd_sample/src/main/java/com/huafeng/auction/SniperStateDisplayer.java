@@ -4,9 +4,7 @@ import com.huafeng.auction.ui.MainWindow;
 
 import javax.swing.*;
 
-import static com.huafeng.auction.Constant.STATUS_BIDDING;
-import static com.huafeng.auction.Constant.STATUS_LOST;
-import static com.huafeng.auction.Constant.STATUS_WINNING;
+import static com.huafeng.auction.Constant.*;
 
 /**
  * Created by stephen on 17/6/18.
@@ -32,6 +30,11 @@ public class SniperStateDisplayer implements SniperListener {
     @Override
     public void sniperWinning(){
         showStatus(STATUS_WINNING);
+    }
+
+    @Override
+    public void sniperWon() {
+        showStatus(STATUS_WON);
     }
 
     private void showStatus (final String status){

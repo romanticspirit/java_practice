@@ -1,8 +1,6 @@
 package com.huafeng.auction;
 
-import static com.huafeng.auction.Constant.STATUS_BIDDING;
-import static com.huafeng.auction.Constant.STATUS_JOINING;
-import static com.huafeng.auction.Constant.STATUS_LOST;
+import static com.huafeng.auction.Constant.*;
 import static com.huafeng.auction.FakeAuctionServer.XMPP_HOSTNAME;
 
 /**
@@ -53,5 +51,13 @@ public class ApplicationRunner {
 
     public void hasShownSniperIsBidding() {
         driver.showSniperStatus(STATUS_BIDDING);
+    }
+
+    public void hasShownSniperIsWinning() {
+        driver.showSniperStatus(STATUS_WINNING);
+    }
+
+    public void showSniperHasWonAuction() {
+        driver.showSniperStatus(STATUS_WON);
     }
 }
