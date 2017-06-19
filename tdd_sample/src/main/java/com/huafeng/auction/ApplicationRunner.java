@@ -1,5 +1,7 @@
 package com.huafeng.auction;
 
+import com.huafeng.auction.ui.MainWindow;
+
 import static com.huafeng.auction.Constant.*;
 import static com.huafeng.auction.FakeAuctionServer.XMPP_HOSTNAME;
 
@@ -12,10 +14,13 @@ public class ApplicationRunner {
 
     public static final String SNIPER_XMPP_ID = SNIPER_ID + "@" + XMPP_HOSTNAME + "/Auction";
 
+    private String itemId;
+
 
     private AuctionSniperDriver driver;
 
     public void startBiddingIn(final FakeAuctionServer auction){
+        itemId = auction.getItemId();
         Thread thread = new Thread ("Test Application"){
             @Override
             public void run (){
@@ -34,11 +39,13 @@ public class ApplicationRunner {
         thread.start();
 
         driver = new AuctionSniperDriver(1000);
-        driver.showSniperStatus(STATUS_JOINING);
+        driver.hasTitle(MainWindow.APPLICATION_TITLE);
+        driver.hasColmnTitles ();
+        driver.showSniperStatus(itemId, 0, 0, STATUS_JOINING);
     }
 
-    public void showSniperHasLostAuction(){
-        driver.showSniperStatus(STATUS_LOST);
+    public void showSniperHasLostAuction(int lastPrice, int bid){
+        driver.showSniperStatus(itemId, lastPrice, bid, STATUS_LOST);
     }
 
     public void stop(){
@@ -49,15 +56,15 @@ public class ApplicationRunner {
     }
 
 
-    public void hasShownSniperIsBidding() {
-        driver.showSniperStatus(STATUS_BIDDING);
+    public void hasShownSniperIsBidding(int lastPrice, int lastBid) {
+        driver.showSniperStatus(itemId, lastPrice, lastBid, STATUS_BIDDING);
     }
 
-    public void hasShownSniperIsWinning() {
-        driver.showSniperStatus(STATUS_WINNING);
+    public void hasShownSniperIsWinning(int winningBid) {
+        driver.showSniperStatus(itemId, winningBid, winningBid,STATUS_WINNING);
     }
 
-    public void showSniperHasWonAuction() {
-        driver.showSniperStatus(STATUS_WON);
+    public void showSniperHasWonAuction(int lastPrice) {
+        driver.showSniperStatus(itemId, lastPrice, lastPrice, STATUS_WON);
     }
 }

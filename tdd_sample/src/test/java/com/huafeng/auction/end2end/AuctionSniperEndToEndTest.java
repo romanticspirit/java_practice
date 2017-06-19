@@ -1,6 +1,8 @@
-package com.huafeng.auction;
+package com.huafeng.auction.end2end;
 
 
+import com.huafeng.auction.ApplicationRunner;
+import com.huafeng.auction.FakeAuctionServer;
 import org.junit.After;
 import org.junit.Test;
 
@@ -18,7 +20,7 @@ public class AuctionSniperEndToEndTest {
         auction.hasReceivedJoinRequestFromSniper(ApplicationRunner.SNIPER_XMPP_ID);
 
         auction.announceClosed();
-        application.showSniperHasLostAuction();
+        application.showSniperHasLostAuction(0, 0);
     }
 
     @Test
@@ -29,12 +31,12 @@ public class AuctionSniperEndToEndTest {
         auction.hasReceivedJoinRequestFromSniper(ApplicationRunner.SNIPER_XMPP_ID);
 
         auction.reportPrice(1000, 98, "other bidder");
-        application.hasShownSniperIsBidding();
+        application.hasShownSniperIsBidding(1000, 1098);
 
         auction.hasReceivedBid(1098, ApplicationRunner.SNIPER_XMPP_ID);
 
         auction.announceClosed();
-        application.showSniperHasLostAuction();
+        application.showSniperHasLostAuction(1000, 1098);
     }
 
     @Test
@@ -43,14 +45,14 @@ public class AuctionSniperEndToEndTest {
         application.startBiddingIn(auction);
         auction.hasReceivedJoinRequestFromSniper(ApplicationRunner.SNIPER_XMPP_ID);
         auction.reportPrice(1000, 98, "other bidder");
-        application.hasShownSniperIsBidding();
+        application.hasShownSniperIsBidding(1000, 1098);
 
         auction.hasReceivedBid(1098, ApplicationRunner.SNIPER_XMPP_ID);
         auction.reportPrice(1098, 97, ApplicationRunner.SNIPER_XMPP_ID);
-        application.hasShownSniperIsWinning();
+        application.hasShownSniperIsWinning(1098);
 
         auction.announceClosed();
-        application.showSniperHasWonAuction ();
+        application.showSniperHasWonAuction (1098);
 
     }
 

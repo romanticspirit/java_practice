@@ -1,6 +1,8 @@
 package com.huafeng.auction;
 
 import com.huafeng.auction.ui.MainWindow;
+import com.huafeng.auction.ui.SnipersTableModel;
+import com.huafeng.auction.ui.SwingThreadSniperListener;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -26,18 +28,14 @@ public class Main{
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 
+    private final SnipersTableModel snipers = new SnipersTableModel();
 
     public Main() throws Exception{
         startUserInterface ();
     }
 
     private void startUserInterface() throws Exception{
-        SwingUtilities.invokeAndWait(new Runnable() {
-            @Override
-            public void run() {
-                ui = new MainWindow();
-            }
-        });
+        SwingUtilities.invokeAndWait(()->  ui = new MainWindow(snipers));
     }
 
     private static XMPPConnection connectTo (String hostName, String userName, String password) throws XMPPException {
@@ -71,7 +69,7 @@ public class Main{
 
         chat.addMessageListener(new AuctionMessageTranslator(
                 connection.getUser(),
-                new AuctionSniper(auction, new SniperStateDisplayer(ui))));
+                new AuctionSniper(auction, new SwingThreadSniperListener(snipers), itemId)));
         auction.join();
     }
 
